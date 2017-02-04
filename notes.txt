@@ -1,0 +1,27 @@
+bluetooth talk
+
+what is bluetooth
+4.1 "bluetooth smart"
+GATT protocol
+GATT server, contains 1+ "services"
+serial number, battery, other stuff
+services contain characteristics, live information
+
+can ask for a profile, works across devices
+xstream pairwise
+chrome://bluetooth-internals/
+
+demos
+bbq thermometer
+elfie
+bb8
+bike sensor
+
+topics
+BLE specs
+reactive streams xstream
+finding spec info
+reverse engineering data
+why? security
+physical web interop
+reusable lib (platinum-bt?)

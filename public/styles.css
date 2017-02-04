@@ -1,0 +1,92 @@
+@import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+@import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+@import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+body { font-family: 'Droid Serif'; }
+h1, h2, h3 {
+  font-family: 'Yanone Kaffeesatz';
+  font-weight: normal;
+}
+
+h1, h2 {
+  margin: 0.1em;
+}
+
+img {
+  max-height: 69vh;
+  max-width: 100%;
+}
+
+video {
+  max-width: 100%;
+  max-height: 65vh;
+}
+
+body.remark-container h1 {
+  font-size: 150px;
+}
+body.remark-container h2 {
+  font-size: 65px;
+}
+
+.remark-container .remark-slide-content {
+  background: #eee;
+}
+
+body.remark-container {
+  background: #eee;
+}
+
+.remark-slide-scaler {
+  /* box-shadow: none; */
+}
+
+.remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+.remark-code {
+  font-size: 40px;
+}
+
+.smaller-code .remark-code {
+  font-size: 30px;
+}
+
+.wide-code code {
+  margin: 0 -2em;
+}
+
+.no-padding {
+  padding: 0;
+}
+
+code {
+  background: #3f3f3f;
+  color: #fff;
+}
+.split {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.half {
+  flex: auto;
+}
+
+.full-img img {
+  width: 100%;
+}
+
+bt-controls {
+  display: none;
+  padding: 1em;
+  position: fixed;
+  background: #ccc;
+  right: 0;
+  top: 0;
+  z-index: 100;
+}
+bt-controls.visible {
+  display: inline-block;
+}
+bt-connector {
+  display: block;
+}
