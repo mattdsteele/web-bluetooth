@@ -15,14 +15,14 @@
   "license": "ISC",
   "dependencies": {
     "keyboardjs": "^2.3.3",
-    "phaser-ce": "^2.7.3",
+    "phaser-ce": "^2.8.3",
     "string.prototype.padstart": "^3.0.0",
-    "xstream": "^10.2.0"
+    "xstream": "^10.9.0"
   },
   "devDependencies": {
     "eddystone-beacon": "^1.0.7",
-    "sw-precache": "^5.0.0",
+    "sw-precache": "^5.2.0",
     "sw-toolbox": "^3.6.0",
-    "webpack": "^2.2.1"
+    "webpack": "^3.5.4"
   }
 }
