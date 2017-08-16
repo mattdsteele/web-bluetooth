@@ -4,7 +4,7 @@ window.Phaser = require('phaser-ce/build/custom/phaser-split');
 
 const width = 800;
 const height = 490;
-const velocity = -200;
+const velocity = -100;
 
 
 
