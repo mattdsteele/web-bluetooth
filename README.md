@@ -2,7 +2,7 @@
 
 Presentation and demos on Web Bluetooth.
 
-Presented at [NebraskaJS](https://www.meetup.com/nebraskajs/events/237677116/) in March 2017.
+Presented at [NebraskaJS](https://www.meetup.com/nebraskajs/events/237677116/) in March 2017, and MidwestJS in August 2017.
 
 More details in [the blog post](https://steele.blue/web-bluetooth).
 

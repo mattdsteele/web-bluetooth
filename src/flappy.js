@@ -4,7 +4,7 @@ window.Phaser = require('phaser-ce/build/custom/phaser-split');
 
 const width = 800;
 const height = 490;
-const velocity = -100;
+const velocity = -150;
 
 
 
@@ -117,7 +117,7 @@ const makeGame = (el) => {
     resume() {
       game.paused = false;
       if (!this.timer) {
-        this.timer = game.time.events.loop(3000, this.addRowOfPipes, this); 
+        this.timer = game.time.events.loop(5000, this.addRowOfPipes, this); 
       }
       if (this.pausedText) {
         this.pausedText.destroy();

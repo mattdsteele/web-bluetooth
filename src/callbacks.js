@@ -98,8 +98,8 @@ class Callbacks {
       thermometerDriven = true;
       const realValue = value.getUint16(12, true);
 
-      const lowThreshold = 50;
-      const highThreshold = 80;
+      const lowThreshold = 60;
+      const highThreshold = 85;
 
       if (realValue !== 3686.3) {
         const reading = realValue / 10;
@@ -116,7 +116,7 @@ class Callbacks {
   }
 
   elfy() {
-    const elfy = bt('elfy');
+    const elfy = bt('bulb');
 
     const reduce = (color) => Math.floor(parseInt(color, 16));
 
@@ -126,12 +126,14 @@ class Callbacks {
         const r = value.substring(1, 3);
         const g = value.substring(3, 5);
         const b = value.substring(5, 7);
+        console.log(r,g,b, reduce(r));
         await elfy.writeColors(reduce(r), reduce(g), reduce(b));
       } catch(error) {
         console.error(error);
       }
     });
 
+    if (true) { return; }
     const q = bt('bbq');
     q.onUpdate(async value => {
       const [r, g, b] = [Math.random(), Math.random(), Math.random()]
