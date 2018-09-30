@@ -17,6 +17,7 @@ class BluetoothControls extends HTMLElement {
 
   connectedCallback() {
     this.keyboardHandler = this.keyboardHandler.bind(this);
+    this.keyboardHandler();
     keyboard.on('ctrl + /', this.keyboardHandler);
     this.innerHTML = `
       <bt-connector type="BBQ"></bt-connector>

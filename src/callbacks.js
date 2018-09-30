@@ -57,7 +57,6 @@ class Callbacks {
     document.querySelector('.hr-button').addEventListener('click', () => { heartRate((event) => {
         const value = event.target.value;
         const hrValue = value.getUint8(1);
-        console.log(hrValue);
         append(`Received: ${value.byteLength} bytes of data: ${value.getUint8(1)}`);
         update(hrValue);
       });
