@@ -1,6 +1,5 @@
 import Bbq from './bt/bbq';
 import Elfy from './bt/elfy';
-import Bulb from './bt/bulb';
 import SpeedCadence from './bt/cycling';
 import keyboard from 'keyboardjs';
 
@@ -22,7 +21,6 @@ class BluetoothControls extends HTMLElement {
     this.innerHTML = `
       <bt-connector type="BBQ"></bt-connector>
       <bt-connector type="Elfy"></bt-connector>
-      <bt-connector type="Bulb"></bt-connector>
       <bt-connector type="Bike"></bt-connector>
     `;
   }
@@ -40,11 +38,6 @@ const handlers = {
     const bbq = new Bbq();
     await bbq.start();
     window.btDevices.bbq = bbq;
-  },
-  async bulb() {
-    const bulb = new Bulb();
-    await bulb.start();
-    window.btDevices.bulb = bulb;
   },
   async elfy() {
     const elfy = new Elfy();

@@ -465,18 +465,9 @@ async writeColors(r, g, b) {
 }
 ```
 ---
-class: center
-![noelfie](img/noelfie.png)
----
-class: center
-![bulbtest](img/bulbtest.png)
----
-class: center
-![minus-25-stars](img/minus-25-stars.png)
----
 name: elfy
 
-# Simulated Elfy
+# Elfy
 
 <label>Elfy Color: <input type="color" class="elfy-input"></input></label>
 

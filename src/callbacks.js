@@ -56,8 +56,9 @@ class Callbacks {
     };
     document.querySelector('.hr-button').addEventListener('click', () => { heartRate((event) => {
         const value = event.target.value;
-        const hrValue = value.getUint16(0);
-        append(`Received: ${value.byteLength} bytes of data: ${value.getUint16(0)}`);
+        const hrValue = value.getUint8(1);
+        console.log(hrValue);
+        append(`Received: ${value.byteLength} bytes of data: ${value.getUint8(1)}`);
         update(hrValue);
       });
     });
@@ -116,7 +117,7 @@ class Callbacks {
   }
 
   elfy() {
-    const elfy = bt('bulb');
+    const elfy = bt('elfy');
 
     const reduce = (color) => Math.floor(parseInt(color, 16));
 
@@ -133,14 +134,15 @@ class Callbacks {
       }
     });
 
-    if (true) { return; }
-    const q = bt('bbq');
+    /*
+    const q = bt('elfy');
     q.onUpdate(async value => {
       const [r, g, b] = [Math.random(), Math.random(), Math.random()]
       .map(e => e * 256);
 
       await elfy.writeColors(r, g, b);
     });
+    */
   }
 
   xstreamBbq() {
