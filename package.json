@@ -21,8 +21,6 @@
   },
   "devDependencies": {
     "eddystone-beacon": "^1.0.7",
-    "sw-precache": "^5.2.0",
-    "sw-toolbox": "^3.6.0",
     "webpack": "^3.5.4"
   }
 }
