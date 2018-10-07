@@ -6,7 +6,6 @@ import padStart from 'string.prototype.padstart';
 import fromEvent from 'xstream/extra/fromEvent';
 import dropRepeats from 'xstream/extra/dropRepeats';
 
-import makeGame from './flappy';
 let game;
 let mainState;
 
@@ -214,10 +213,11 @@ class Callbacks {
     });
   }
 
-  flappy() {
+  async flappy() {
     const bike = bt('bike');
     if (!bike.isReady) { return; }
     if (game) { return; }
+    const { makeGame } = await import('./flappy');
     [game, mainState] = makeGame(document.querySelector('.flappy-bike'));
     bike.parsedCadence$().addListener({
       next: (val) => { 

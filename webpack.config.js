@@ -3,9 +3,11 @@
 const path = require('path');
 
 const webpack = require('webpack');
+const BundleAnalyzer = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const dirSrc = path.resolve(__dirname, 'src');
 const dirTest = path.resolve(__dirname, 'test');
+const public = path.resolve(__dirname, 'public');
 const dirBuild = path.resolve(__dirname, 'web-bluetooth');
 const dirDist = path.resolve(__dirname, 'dist');
 const dirDev = path.resolve(__dirname, 'dev');
@@ -27,33 +29,24 @@ output = {
 };
 plugins = [
   // Avoid publishing files when compilation fails
-  new webpack.NoEmitOnErrorsPlugin(),
+  new webpack.NoEmitOnErrorsPlugin()
 ];
 // Create Sourcemaps for the bundle
 devtool = 'source-map';
 
 module.exports = {
+  mode: 'development',
   entry,
   output,
   plugins,
   devtool,
   devServer: {
-    contentBase: dirBuild,
+    compress: true,
+    contentBase: public,
     historyApiFallback: true
   },
   module: {
-    rules: [
-      /*
-      {
-        use: 'babel-loader',
-        test: dirSrc,
-      },
-      {
-        use: 'babel-loader',
-        test: dirTest,
-      }
-      */
-    ],
+    rules: [],
   },
   stats: {
     // Nice colored output

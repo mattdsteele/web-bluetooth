@@ -8,6 +8,7 @@
     "start": "webpack --watch",
     "cp": "cp -R public/* web-bluetooth",
     "build": "webpack",
+    "serve": "webpack-dev-server",
     "dist": "npm run clean && npm run build && npm run cp"
   },
   "author": "",
@@ -21,6 +22,9 @@
   },
   "devDependencies": {
     "eddystone-beacon": "^1.0.7",
-    "webpack": "^3.5.4"
+    "webpack": "^4.20.2",
+    "webpack-bundle-analyzer": "^3.0.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.9"
   }
 }

@@ -165,4 +165,4 @@ const makeGame = (el) => {
 
   return [game, mainState];
 };
-export default makeGame;
+export { makeGame };

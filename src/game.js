@@ -1,4 +1,4 @@
-import makeGame from './flappy';
+import {makeGame} from './flappy';
 import SpeedCadence from './bt/cycling';
 const bike = new SpeedCadence();
 
