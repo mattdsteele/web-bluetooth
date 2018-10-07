@@ -1,4 +1,3 @@
-import './sw';
 import BtControls from './bt-controls';
 import Callbacks from './callbacks';
 import './heart-rate';

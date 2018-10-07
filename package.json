@@ -6,10 +6,9 @@
   "scripts": {
     "clean": "rm -rf web-bluetooth",
     "start": "webpack --watch",
-    "cp": "cp -R public/* web-bluetooth && cp node_modules/sw-toolbox/sw-toolbox.js web-bluetooth",
+    "cp": "cp -R public/* web-bluetooth",
     "build": "webpack",
-    "sw": "sw-precache --config=make-sw.js && mv service-worker.js web-bluetooth",
-    "dist": "npm run clean && npm run build && npm run cp && npm run sw"
+    "dist": "npm run clean && npm run build && npm run cp"
   },
   "author": "",
   "license": "ISC",
