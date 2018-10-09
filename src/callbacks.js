@@ -20,22 +20,22 @@ const printRawBbq = selector => {
       items.push(padStart(arr[i].toString(16), 2, '0'));
     }
     update(selector, items.join(' '));
-  }); 
+  });
 };
 
 const update = (selector, data) => {
   document.querySelector(selector).innerHTML = data;
 };
 const click = (selector, cb) => {
-  document.querySelector(selector).addEventListener('click', (e) => cb(e));
-}
+  document.querySelector(selector).addEventListener('click', e => cb(e));
+};
 
 let thermometerDriven = false;
 
 class Callbacks {
   deviceInfo(slide) {
     const status = document.querySelector('.device-info');
-    const append = (text) => {
+    const append = text => {
       status.innerHTML += `${JSON.stringify(text)}\n`;
     };
 
@@ -47,16 +47,19 @@ class Callbacks {
   hrDemo(slide) {
     const status = document.querySelector('.hr-status');
     const hr = document.querySelector('.heart-rate');
-    const update = (text) => {
+    const update = text => {
       hr.innerHTML = text;
     };
-    const append = (text) => {
+    const append = text => {
       status.innerHTML += `${text}\n`;
     };
-    document.querySelector('.hr-button').addEventListener('click', () => { heartRate((event) => {
+    document.querySelector('.hr-button').addEventListener('click', () => {
+      heartRate(event => {
         const value = event.target.value;
         const hrValue = value.getUint8(1);
-        append(`Received: ${value.byteLength} bytes of data: ${value.getUint8(1)}`);
+        append(
+          `Received: ${value.byteLength} bytes of data: ${value.getUint8(1)}`
+        );
         update(hrValue);
       });
     });
@@ -69,8 +72,32 @@ class Callbacks {
   bbqReactive() {
     printRawBbq('.bbq-reactive');
   }
+  angleFinder() {
+    const { angle } = window.btDevices;
+    angle.onUpdate(value => {
+      console.log('data length', value.byteLength);
+      const arr = new Uint8Array(value.buffer);
+      const items = [];
+      for (let i = 0; i < value.byteLength; i++) {
+        items.push(padStart(arr[i].toString(16), 2, '0'));
+      }
+      update('.anglefinder-raw', items.join(' '));
+    });
+  }
+  angleFinderParsed({ slideshow }) {
+    const { angle } = window.btDevices;
+    angle.onUpdate(value => {
+      const decoder = new TextDecoder('utf-8');
+      const parsedVal = decoder.decode(value);
+      update('.anglefinder-parsed', parsedVal);
 
-  bbqParsed({slideshow}) {
+      if (parsedVal.startsWith('+042')) {
+        slideshow.gotoNextSlide();
+      }
+    });
+  }
+
+  bbqParsed({ slideshow }) {
     const q = window.btDevices.bbq;
     q.onUpdate(value => {
       console.log('data length', value.byteLength);
@@ -82,14 +109,15 @@ class Callbacks {
       update('.bbq-parsed-raw', items.join(' '));
       const realValue = value.getUint16(12, true);
       update('.bbq-parsed-parsed', realValue / 10);
-
-    }); 
+    });
   }
 
-  startTdd({slideshow}) {
+  startTdd({ slideshow }) {
     let lastTriggeredCold = false;
     let initialized = false;
-    if (initialized) { return; }
+    if (initialized) {
+      return;
+    }
 
     const q = window.btDevices.bbq;
     q.onUpdate(value => {
@@ -117,20 +145,22 @@ class Callbacks {
   elfy() {
     const elfy = bt('elfy');
 
-    const reduce = (color) => Math.floor(parseInt(color, 16));
+    const reduce = color => Math.floor(parseInt(color, 16));
 
-    document.querySelector('.elfy-input').addEventListener('change', async ({ target }) => {
-      try {
-        const { value } = target;
-        const r = value.substring(1, 3);
-        const g = value.substring(3, 5);
-        const b = value.substring(5, 7);
-        console.log(r,g,b, reduce(r));
-        await elfy.writeColors(reduce(r), reduce(g), reduce(b));
-      } catch(error) {
-        console.error(error);
-      }
-    });
+    document
+      .querySelector('.elfy-input')
+      .addEventListener('change', async ({ target }) => {
+        try {
+          const { value } = target;
+          const r = value.substring(1, 3);
+          const g = value.substring(3, 5);
+          const b = value.substring(5, 7);
+          console.log(r, g, b, reduce(r));
+          await elfy.writeColors(reduce(r), reduce(g), reduce(b));
+        } catch (error) {
+          console.error(error);
+        }
+      });
 
     /*
     const q = bt('elfy');
@@ -145,21 +175,26 @@ class Callbacks {
 
   xstreamBbq() {
     const q = window.btDevices.bbq;
-    if (!q.rawChar()) { return }
-    const thermometerReading$ = fromEvent(q.rawChar(), 'characteristicvaluechanged');
+    if (!q.rawChar()) {
+      return;
+    }
+    const thermometerReading$ = fromEvent(
+      q.rawChar(),
+      'characteristicvaluechanged'
+    );
     thermometerReading$
-    .map(({ target: { value } }) => value.getUint16(12, true))
-    .map(e => e / 10)
-    .compose(dropRepeats())
-    .addListener({
-      next(val) { 
-        update('.bbq-stream', `Reading: ${val} degrees`); 
-      }
-    });
+      .map(({ target: { value } }) => value.getUint16(12, true))
+      .map(e => e / 10)
+      .compose(dropRepeats())
+      .addListener({
+        next(val) {
+          update('.bbq-stream', `Reading: ${val} degrees`);
+        }
+      });
   }
 
   async rawCycling() {
-    const asHexString = (value) => {
+    const asHexString = value => {
       let a = [];
       for (let i = 0; i < value.byteLength; i++) {
         a.push('0x' + ('00' + value.getUint8(i).toString(16)).slice(-2));
@@ -168,62 +203,78 @@ class Callbacks {
     };
 
     const bike = bt('bike');
-    if (!bike.isReady) { return; }
-    bike.rawMeasurement$()
-    .map(v => asHexString(v))
-    .addListener({ 
-      next(val) {
-        update('.raw-cycling', val);
-      }
-    });
+    if (!bike.isReady) {
+      return;
+    }
+    bike
+      .rawMeasurement$()
+      .map(v => asHexString(v))
+      .addListener({
+        next(val) {
+          update('.raw-cycling', val);
+        }
+      });
   }
 
   cadenceAndSpeed() {
     const bike = bt('bike');
-    if (!bike.isReady) { return; }
-    bike.parsedCadence$()
-    .addListener({
-      next(val) { 
+    if (!bike.isReady) {
+      return;
+    }
+    bike.parsedCadence$().addListener({
+      next(val) {
         val = Math.round(val * 100) / 100;
         const str = `cadence: ${val} rpm`;
         update('.cadence-calc', str);
       },
-      error(err) { console.error(err) }
+      error(err) {
+        console.error(err);
+      }
     });
 
-    bike.parsedSpeed$()
-    .addListener({
-      next(val) { 
+    bike.parsedSpeed$().addListener({
+      next(val) {
         val = Math.round(val * 100) / 100;
         update('.speed-calc', `speed: ${val} kph`);
       },
-      error(err) { console.error(err) }
+      error(err) {
+        console.error(err);
+      }
     });
   }
 
   streamCycling() {
     const bike = bt('bike');
-    if (!bike.isReady) { return; }
-    bike.parsedMeasurement$()
-    .addListener({ 
-      next(val) { 
+    if (!bike.isReady) {
+      return;
+    }
+    bike.parsedMeasurement$().addListener({
+      next(val) {
         update('.parsed-cycling', JSON.stringify(val, null, 2));
       },
-      error(err) { console.error(err) }
+      error(err) {
+        console.error(err);
+      }
     });
   }
 
   async flappy() {
     const bike = bt('bike');
-    if (!bike.isReady) { return; }
-    if (game) { return; }
+    if (!bike.isReady) {
+      return;
+    }
+    if (game) {
+      return;
+    }
     const { makeGame } = await import('./flappy');
     [game, mainState] = makeGame(document.querySelector('.flappy-bike'));
     bike.parsedCadence$().addListener({
-      next: (val) => { 
+      next: val => {
         mainState.moveBird(val);
       },
-      error(err) { console.error(err) }
+      error(err) {
+        console.error(err);
+      }
     });
     // Start the state to actually start the game
     game.state.start('main');

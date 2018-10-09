@@ -1,10 +1,10 @@
 import Bbq from './bt/bbq';
 import Elfy from './bt/elfy';
 import SpeedCadence from './bt/cycling';
+import { AngleFinder } from './bt/angle-finder';
 import keyboard from 'keyboardjs';
 
 class BluetoothControls extends HTMLElement {
-
   constructor() {
     super();
     this.visible = false;
@@ -23,6 +23,7 @@ class BluetoothControls extends HTMLElement {
       <bt-connector type="BBQ"></bt-connector>
       <bt-connector type="Elfy"></bt-connector>
       <bt-connector type="Bike"></bt-connector>
+      <bt-connector type="Angle"></bt-connector>
     `;
   }
 
@@ -49,6 +50,11 @@ const handlers = {
     const bike = new SpeedCadence();
     await bike.connect();
     window.btDevices.bike = bike;
+  },
+  async angle() {
+    const angle = new AngleFinder();
+    await angle.start();
+    window.btDevices.angle = angle;
   }
 };
 
@@ -61,11 +67,14 @@ class BluetoothConnector extends HTMLElement {
     this.innerHTML = `
       <label><input type="checkbox"></input> ${attr}</label>
     `;
-    this.querySelector('input').addEventListener('click', async ({ target: { checked } }) => {
-      if (checked) {
-        return await this.connect(attr.toLowerCase());
+    this.querySelector('input').addEventListener(
+      'click',
+      async ({ target: { checked } }) => {
+        if (checked) {
+          return await this.connect(attr.toLowerCase());
+        }
       }
-    });
+    );
   }
 }
 

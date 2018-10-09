@@ -365,9 +365,9 @@ char.addEventListener('characteristicvaluechanged', e => {
 ---
 name: bbqParsed
 
-<h2 class="bbq-parsed-raw"></h3>
+<h2 class="bbq-parsed-raw"></h2>
 
-<h1 class="bbq-parsed-parsed"></h3>
+<h1 class="bbq-parsed-parsed"></h1>
 
 ---
 name: startTdd
@@ -376,6 +376,29 @@ class: middle center
 --
 
 ## (Thermometer-Driven-Deck)
+
+---
+class: center middle
+name: angleFinder
+
+# Bluetooth Angle Finder
+
+
+<h2 class="anglefinder-raw"></h2>
+
+---
+name: angleFinderParsed
+## Reading Strings
+
+```javascript
+char.addEventListener('characteristicvaluechanged', e => {
+  const { value } = e.target;
+  const decoder = new TextDecoder('utf-8');
+  console.log(decoder.decode(val));
+});
+```
+
+<h2 class="anglefinder-parsed"></h2>
 
 ---
 class: center middle
