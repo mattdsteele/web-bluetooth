@@ -3,6 +3,8 @@ import Elfy from './bt/elfy';
 import SpeedCadence from './bt/cycling';
 import { AngleFinder } from './bt/angle-finder';
 import keyboard from 'keyboardjs';
+import { defineCustomElements } from 'turn-touch-element/dist/loader';
+defineCustomElements(window);
 
 class BluetoothControls extends HTMLElement {
   constructor() {
@@ -20,6 +22,7 @@ class BluetoothControls extends HTMLElement {
     this.keyboardHandler();
     keyboard.on('ctrl + /', this.keyboardHandler);
     this.innerHTML = `
+      <bt-connector type="Remote"></bt-connector>
       <bt-connector type="BBQ"></bt-connector>
       <bt-connector type="Elfy"></bt-connector>
       <bt-connector type="Bike"></bt-connector>
@@ -36,6 +39,17 @@ customElements.define('bt-controls', BluetoothControls);
 
 window.btDevices = {};
 const handlers = {
+  async remote() {
+    const turnTouch = document.querySelector('turn-touch');
+    await turnTouch.connect();
+    const slideshow = window._slideshow;
+    turnTouch.onLeft = () => {
+      slideshow.gotoPreviousSlide();
+    };
+    turnTouch.onRight = () => {
+      slideshow.gotoNextSlide();
+    };
+  },
   async bbq() {
     const bbq = new Bbq();
     await bbq.start();

@@ -19,6 +19,7 @@ var slideshow = remark.create({
 });
 
 const callbacks = new Callbacks();
+window._slideshow = slideshow;
 slideshow.on('showSlide', slide => {
   const {
     properties: { name }
