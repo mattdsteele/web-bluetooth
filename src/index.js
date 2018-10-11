@@ -13,13 +13,17 @@ var slideshow = remark.create({
     scroll: false,
     touch: false
   },
-  slideNumberFormat() { return ''; }
+  slideNumberFormat() {
+    return '@mattdsteele';
+  }
 });
 
 const callbacks = new Callbacks();
 slideshow.on('showSlide', slide => {
-  const { properties: { name } } = slide;
+  const {
+    properties: { name }
+  } = slide;
   if (name && callbacks[name]) {
-    callbacks[name]({ slide, slideshow});
+    callbacks[name]({ slide, slideshow });
   }
 });

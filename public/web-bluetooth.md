@@ -774,13 +774,10 @@ class: center middle
 ![kinomap](img/kinomap.png)
 ---
 class: center middle
-# <3 The Web
+# Weirdo Projects Are Fun
 ---
 class: center middle
 ![bb8](img/bb8.png)
----
-class: center middle
-<video src="vid/bb8-opera.mp4" controls></video>
 ---
 class: center middle
 ![bb8gh](img/bb8gh.png)
@@ -789,7 +786,13 @@ class: center middle
 <video src="vid/bb8.mp4" controls></video>
 ---
 class: center middle
-# [Simon Says BB-8](simon/)
+![led strip](img/led-strip.PNG)
+---
+class: center middle bigvid
+<video src="vid/bike-lghts.mp4" controls></video>
+---
+class: center middle
+# Happy Hacking
 ---
 class: center middle
 # @mattdsteele
