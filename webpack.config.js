@@ -35,7 +35,7 @@ plugins = [
 devtool = 'source-map';
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry,
   output,
   plugins,
@@ -46,10 +46,10 @@ module.exports = {
     historyApiFallback: true
   },
   module: {
-    rules: [],
+    rules: []
   },
   stats: {
     // Nice colored output
-    colors: true,
-  },
+    colors: true
+  }
 };

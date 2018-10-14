@@ -797,7 +797,7 @@ class: center middle
 class: center middle
 # @mattdsteele
 
-## matt.steele.blue/web-bluetooth
+## steele.blue/web-bluetooth
 
 ---
 
