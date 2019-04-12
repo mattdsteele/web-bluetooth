@@ -4,9 +4,9 @@
   "description": "",
   "main": "slides.js",
   "scripts": {
-    "clean": "rm -rf web-bluetooth",
+    "clean": "rm -rf flappy",
     "start": "webpack --watch",
-    "cp": "cp -R public/* web-bluetooth",
+    "cp": "cp -R public/* flappy",
     "build": "webpack",
     "serve": "webpack-dev-server",
     "dist": "npm run clean && npm run build && npm run cp"
