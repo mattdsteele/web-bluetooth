@@ -23,8 +23,8 @@ body {
 }
 .flappy {
   font-family: "Flappy Bird";
-  font-size: 17vw;
-  margin: 1vw 0 0 0;
+  font-size: 11vw;
+  margin: -1vw 0;
   text-align: center;
   animation: rainbow 5s infinite;
 }

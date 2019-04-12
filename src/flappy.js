@@ -2,10 +2,11 @@ window.PIXI = require("phaser-ce/build/custom/pixi");
 window.p2 = require("phaser-ce/build/custom/p2");
 window.Phaser = require("phaser-ce/build/custom/phaser-split");
 
-const width = 1280;
-const height = 710;
+const width = 1180;
+const height = 580;
 const velocity = -150;
 const numberOfRows = 8;
+let playable = false;
 
 const makeGame = el => {
   // Initialize Phaser, and create a width by height game
@@ -20,6 +21,7 @@ const makeGame = el => {
     },
 
     create: function() {
+      console.log("creating");
       // Change the background color of the game to blue
       game.stage.backgroundColor = "#71c5cf";
 
@@ -53,7 +55,8 @@ const makeGame = el => {
         fill: "#ffffff"
       });
 
-      game.paused = true;
+      this.paused = true;
+      playable = true;
     },
 
     speedValue(value) {
@@ -63,6 +66,10 @@ const makeGame = el => {
       return ((x - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
     },
     moveBird(value) {
+      if (this.bird.alive === false) {
+        console.log("not moving a dead bird");
+        return;
+      }
       const MIN_SPEED = 10;
       const MAX_SPEED = 20;
       this.labelCadence.text = `Speed: ${this.speedValue(value)}`;
@@ -102,6 +109,7 @@ const makeGame = el => {
       pipe.outOfBoundsKill = true;
     },
     addRowOfPipes: function() {
+      console.log("adding pipe row");
       // Randomly pick a number between 1 and 5
       // This will be the hole position
       var hole = Math.floor(Math.random() * numberOfRows) + 1;
@@ -116,36 +124,79 @@ const makeGame = el => {
       this.labelScore.text = `Score: ${this.score}`;
     },
 
+    gameOver(finalScore) {
+      game.paused = true;
+      if (!this.pausedText) {
+        this.pausedText = game.add.text(
+          270,
+          game.world.centerY - 100,
+          "Game Over",
+          {
+            font: "180px Flappy Bird",
+            fill: "#2a2a2a"
+          }
+        );
+        this.pausedText = game.add.text(
+          270,
+          game.world.centerY + 100,
+          `Final Score: ${finalScore}`,
+          {
+            font: "100px Helvetica",
+            fill: "#000"
+          }
+        );
+      }
+    },
     pause(text) {
       game.paused = true;
       if (!this.pausedText) {
         this.pausedText = game.add.text(130, game.world.centerY - 50, text, {
-          font: "100px Arial",
+          font: "100px Helvetica",
           fill: "green"
         });
       }
     },
 
-    resume() {
-      game.paused = false;
+    addTimer() {
       if (!this.timer) {
-        this.timer = game.time.events.loop(9000, this.addRowOfPipes, this);
-      }
-      if (this.pausedText) {
-        this.pausedText.destroy();
-        delete this.pausedText;
+        this.timer = game.time.events.loop(
+          9000,
+          () => this.addRowOfPipes(),
+          this
+        );
+        console.log("setting timer");
       }
     },
-
+    resume() {
+      if (!playable) {
+        console.log("game not playable yet");
+        return;
+      }
+      if (this.bird.alive === false) {
+        // Bird is already dead
+        console.log("not resuming on a dead bird");
+        return;
+      }
+      console.log("resuming game");
+      this.addTimer();
+      game.paused = false;
+      if (this.pausedText) {
+        this.clearPausedText();
+      }
+    },
+    clearPausedText() {
+      this.pausedText.destroy();
+      delete this.pausedText;
+    },
     update: function() {
       // If the bird is out of the screen (too high or too low)
       // Call the 'restartGame' function
-      if (this.bird.y < 0 || this.bird.y > height) this.restartGame();
+      // if (this.bird.y < 0 || this.bird.y > height) this.restartGame();
 
       game.physics.arcade.overlap(
         this.bird,
         this.pipes,
-        this.restartGame,
+        this.hitPipe,
         null,
         this
       );
@@ -154,12 +205,14 @@ const makeGame = el => {
     // Restart the game
     restartGame: function() {
       // Start the 'main' state, which restarts the game
-      game.time.events.remove(this.timer);
-      delete this.timer;
-      game.state.start("main");
+      console.log("restarting");
+      this.bird.alive = true;
+      game.paused = false;
+      this.clearPausedText();
+      game.state.restart(true, true);
     },
 
-    hitPipe: _ => {
+    hitPipe() {
       // If the bird has already hit a pipe, do nothing
       // It means the bird is already falling off the screen
       if (this.bird.alive == false) return;
@@ -167,11 +220,19 @@ const makeGame = el => {
       // Set the alive property of the bird to false
       this.bird.alive = false;
 
+      // Change the background color of the game to blue
+      game.stage.backgroundColor = "#ffd800";
+
       // Prevent new pipes from appearing
+      playable = false;
       game.time.events.remove(this.timer);
+      delete this.timer;
 
       // Go through all the pipes, and stop their movement
-      this.pause("GAME OVER");
+      this.gameOver(this.score);
+      setTimeout(() => {
+        this.restartGame();
+      }, 5000);
     }
   };
   // Add the 'mainState' and call it 'main'
