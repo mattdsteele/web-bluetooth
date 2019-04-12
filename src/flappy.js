@@ -48,7 +48,7 @@ const makeGame = el => {
         fill: "#ffffff"
       });
 
-      this.labelCadence = game.add.text(20, 60, "0 RPM", {
+      this.labelCadence = game.add.text(20, 60, "Speed: 0", {
         font: "30px Arial",
         fill: "#ffffff"
       });
@@ -56,19 +56,30 @@ const makeGame = el => {
       game.paused = true;
     },
 
+    speedValue(value) {
+      return Math.round(value * 10) / 10;
+    },
+    map(x, in_min, in_max, out_min, out_max) {
+      return ((x - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
+    },
     moveBird(value) {
-      this.labelCadence.text = `${Math.round(value)} RPM`;
+      const MIN_SPEED = 10;
+      const MAX_SPEED = 20;
+      this.labelCadence.text = `Speed: ${this.speedValue(value)}`;
       console.log(`moving ${value}`);
-      if (value < 70) {
-        this.pause();
+      if (value < MIN_SPEED) {
+        this.pause("PEDAL FASTER");
         console.log("PEDAL FASTER");
+        return;
+      } else if (value > MAX_SPEED) {
+        console.log("SLOW DOWN");
+        this.pause("SLOW DOWN");
         return;
       } else {
         this.resume();
       }
 
-      const maxPedal = 150;
-      const fraction = (value - 50) / 100;
+      const fraction = this.map(value, MIN_SPEED, MAX_SPEED, 0, 1);
       game.add
         .tween(this.bird)
         .to({ y: height - height * fraction }, 200, Phaser.Easing.Cubic.InOut)
@@ -99,28 +110,27 @@ const makeGame = el => {
       // Add the 6 pipes
       // With one big hole at position 'hole' and 'hole + 1'
       for (var i = 0; i < numberOfRows + 3; i++)
-        if (i != hole && i != hole + 1) this.addOnePipe(width, i * 60 + 10);
+        if (i != hole && i != hole + 1 && i !== hole + 2 && i !== hole + 3)
+          this.addOnePipe(width, i * 60 + 10);
 
       this.score += 1;
       this.labelScore.text = `Score: ${this.score}`;
     },
 
-    pause() {
+    pause(text) {
       game.paused = true;
       if (!this.pausedText) {
-        this.pausedText = game.add.text(
-          30,
-          game.world.centerY - 50,
-          "PEDAL FASTER",
-          { font: "100px Arial", fill: "red" }
-        );
+        this.pausedText = game.add.text(130, game.world.centerY - 50, text, {
+          font: "100px Arial",
+          fill: "green"
+        });
       }
     },
 
     resume() {
       game.paused = false;
       if (!this.timer) {
-        this.timer = game.time.events.loop(5000, this.addRowOfPipes, this);
+        this.timer = game.time.events.loop(9000, this.addRowOfPipes, this);
       }
       if (this.pausedText) {
         this.pausedText.destroy();
@@ -162,7 +172,7 @@ const makeGame = el => {
       game.time.events.remove(this.timer);
 
       // Go through all the pipes, and stop their movement
-      this.pause();
+      this.pause("GAME OVER");
     }
   };
   // Add the 'mainState' and call it 'main'
