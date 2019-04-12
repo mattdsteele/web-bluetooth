@@ -3,7 +3,6 @@
 const path = require("path");
 
 const webpack = require("webpack");
-const BundleAnalyzer = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 const dirSrc = path.resolve(__dirname, "src");
 const dirTest = path.resolve(__dirname, "test");
@@ -35,7 +34,7 @@ plugins = [
 devtool = "source-map";
 
 module.exports = {
-  mode: "production",
+  mode: "development",
   entry,
   output,
   plugins,
