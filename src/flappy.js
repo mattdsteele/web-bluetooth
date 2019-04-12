@@ -66,7 +66,6 @@ const makeGame = el => {
       const MIN_SPEED = 10;
       const MAX_SPEED = 20;
       this.labelCadence.text = `Speed: ${this.speedValue(value)}`;
-      console.log(`moving ${value}`);
       if (value < MIN_SPEED) {
         this.pause("PEDAL FASTER");
         console.log("PEDAL FASTER");

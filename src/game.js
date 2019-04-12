@@ -13,21 +13,16 @@ document.addEventListener("DOMContentLoaded", () => {
     bike.parsedSpeed$().addListener({
       next(val) {
         mainState.moveBird(val);
-        console.log("speed", val);
       }
     });
     bike.parsedCadence$().addListener({
-      next: val => {
-        console.log("cadence", val);
-      },
+      next: val => {},
       error(err) {
         console.error(err);
       }
     });
     bike.parsedMeasurement$().addListener({
-      next(val) {
-        console.log("meas", val);
-      }
+      next(val) {}
     });
   });
 });
