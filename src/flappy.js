@@ -116,8 +116,10 @@ const makeGame = el => {
           return 4;
         } else if (score <= 8) {
           return 3;
-        } else {
+        } else if (score <= 11) {
           return 2;
+        } else {
+          return 1;
         }
       };
       const shouldAddPipe = (i, holePosition) => {
