@@ -12,35 +12,60 @@ export default class SpeedCadence {
         }
       ]
     };
-    this.device = await navigator.bluetooth.requestDevice(options);
+    try {
+      this.device = await navigator.bluetooth.requestDevice(options);
+    } catch (e) {
+      console.error(e);
+    }
     if (!this.device) {
       throw "No device selected";
     }
   }
 
   async connect() {
+    console.log("connecting", this.device);
     if (!this.device) {
       await this.request();
     }
-    const server = await this.device.gatt.connect();
-    const service = await server.getPrimaryService("cycling_speed_and_cadence");
-    this.char = await service.getCharacteristic("csc_measurement");
-    this.device.addEventListener("gattserverdisconnected", () => {
-      this.onDisconnected();
-    });
-    this.isReady = true;
-    return await this.char.startNotifications();
+    try {
+      const server = await this.device.gatt.connect();
+      const service = await server.getPrimaryService(
+        "cycling_speed_and_cadence"
+      );
+      this.char = await service.getCharacteristic("csc_measurement");
+      this.device.addEventListener("gattserverdisconnected", () => {
+        this.onDisconnected();
+      });
+      this.isReady = true;
+      return await this.char.startNotifications();
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   async onDisconnected() {
     this.isReady = false;
     console.log("Device is disconnected.");
     console.debug("Reconnecting...");
+    delete this.device;
     await this.reconnect();
   }
 
   async reconnect() {
-    await this.connect();
+    this.exponentialBackoff(
+      3 /* max retries */,
+      2 /* seconds delay */,
+      async () => {
+        this.time("Connecting to Bluetooth Device... ");
+        await this.connect();
+      },
+      () => {
+        console.log("> Bluetooth Device connected. Try disconnect it now.");
+      },
+      () => {
+        this.time("Failed to reconnect.");
+      }
+    );
     console.log("Reconnected.");
   }
 
@@ -128,5 +153,28 @@ export default class SpeedCadence {
         return value;
       }
     );
+  }
+
+  /* Utils */
+  // This function keeps calling "toTry" until promise resolves or has
+  // retried "max" number of times. First retry has a delay of "delay" seconds.
+  // "success" is called upon success.
+  async exponentialBackoff(max, delay, toTry, success, fail) {
+    try {
+      const result = await toTry();
+      success(result);
+    } catch (error) {
+      if (max === 0) {
+        return fail();
+      }
+      this.time("Retrying in " + delay + "s... (" + max + " tries left)");
+      setTimeout(() => {
+        this.exponentialBackoff(--max, delay * 2, toTry, success, fail);
+      }, delay * 1000);
+    }
+  }
+
+  time(text) {
+    console.log("[" + new Date().toJSON().substr(11, 8) + "] " + text);
   }
 }
