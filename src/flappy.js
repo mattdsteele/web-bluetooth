@@ -5,7 +5,7 @@ window.Phaser = require("phaser-ce/build/custom/phaser-split");
 const width = 1180;
 const height = 580;
 const velocity = -150;
-const numberOfRows = 8;
+const numberOfRows = 11;
 let playable = false;
 
 const makeGame = el => {
@@ -109,16 +109,35 @@ const makeGame = el => {
       pipe.outOfBoundsKill = true;
     },
     addRowOfPipes: function() {
+      const holeSize = score => {
+        if (score < 4) {
+          return 5;
+        } else if (score <= 6) {
+          return 4;
+        } else if (score <= 8) {
+          return 3;
+        } else {
+          return 2;
+        }
+      };
+      const shouldAddPipe = (i, holePosition) => {
+        if (i < holePosition) {
+          return true;
+        }
+        console.log("HOLE SIZE", holeSize(this.score));
+        return i >= holePosition + holeSize(this.score);
+      };
       console.log("adding pipe row");
       // Randomly pick a number between 1 and 5
       // This will be the hole position
-      var hole = Math.floor(Math.random() * numberOfRows) + 1;
+      // var hole = Math.floor(Math.random() * numberOfRows) + 1;
+      const holePosition =
+        Math.floor(Math.random() * (numberOfRows - holeSize(this.score))) + 1;
 
       // Add the 6 pipes
       // With one big hole at position 'hole' and 'hole + 1'
-      for (var i = 0; i < numberOfRows + 3; i++)
-        if (i != hole && i != hole + 1 && i !== hole + 2 && i !== hole + 3)
-          this.addOnePipe(width, i * 60 + 10);
+      for (var i = 0; i < numberOfRows; i++)
+        if (shouldAddPipe(i, holePosition)) this.addOnePipe(width, i * 60 + 10);
 
       this.score += 1;
       this.labelScore.text = `Score: ${this.score}`;
