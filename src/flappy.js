@@ -1,6 +1,6 @@
-window.PIXI = require("phaser-ce/build/custom/pixi");
-window.p2 = require("phaser-ce/build/custom/p2");
-window.Phaser = require("phaser-ce/build/custom/phaser-split");
+window.PIXI = require('phaser-ce/build/custom/pixi');
+window.p2 = require('phaser-ce/build/custom/p2');
+window.Phaser = require('phaser-ce/build/custom/phaser-split');
 
 const width = 1180;
 const height = 580;
@@ -16,20 +16,20 @@ const makeGame = el => {
   var mainState = {
     preload: function() {
       // Load the bird sprite
-      game.load.image("bird", "flap/assets/dospace.png");
-      game.load.image("pipe", "flap/assets/pipe.png");
+      game.load.image('bird', 'flap/assets/dospace.png');
+      game.load.image('pipe', 'flap/assets/pipe.png');
     },
 
     create: function() {
-      console.log("creating");
+      console.log('creating');
       // Change the background color of the game to blue
-      game.stage.backgroundColor = "#71c5cf";
+      game.stage.backgroundColor = '#71c5cf';
 
       // Set the physics system
       game.physics.startSystem(Phaser.Physics.ARCADE);
 
       // Display the bird at the position x=100 and y=245
-      this.bird = game.add.sprite(50, 399, "bird");
+      this.bird = game.add.sprite(50, 399, 'bird');
 
       // Add physics to the bird
       // Needed for: movements, gravity, collisions, etc.
@@ -45,14 +45,14 @@ const makeGame = el => {
       // this.timer = game.time.events.loop(3000, this.addRowOfPipes, this);
 
       this.score = 0;
-      this.labelScore = game.add.text(20, 20, "Score: 0", {
-        font: "30px Arial",
-        fill: "#ffffff"
+      this.labelScore = game.add.text(20, 20, 'Score: 0', {
+        font: '30px Arial',
+        fill: '#ffffff'
       });
 
-      this.labelCadence = game.add.text(20, 60, "Speed: 0", {
-        font: "30px Arial",
-        fill: "#ffffff"
+      this.labelCadence = game.add.text(20, 60, 'Speed: 0', {
+        font: '30px Arial',
+        fill: '#ffffff'
       });
 
       this.paused = true;
@@ -67,19 +67,19 @@ const makeGame = el => {
     },
     moveBird(value) {
       if (this.bird.alive === false) {
-        console.log("not moving a dead bird");
+        console.log('not moving a dead bird');
         return;
       }
-      const MIN_SPEED = 10;
-      const MAX_SPEED = 20;
+      const MIN_SPEED = 40;
+      const MAX_SPEED = 80;
       this.labelCadence.text = `Speed: ${this.speedValue(value)}`;
       if (value < MIN_SPEED) {
-        this.pause("PEDAL FASTER");
-        console.log("PEDAL FASTER");
+        this.pause('PEDAL FASTER');
+        console.log('PEDAL FASTER', value);
         return;
       } else if (value > MAX_SPEED) {
-        console.log("SLOW DOWN");
-        this.pause("SLOW DOWN");
+        console.log('SLOW DOWN');
+        this.pause('SLOW DOWN');
         return;
       } else {
         this.resume();
@@ -93,7 +93,7 @@ const makeGame = el => {
     },
     addOnePipe: function(x, y) {
       // Create a pipe at the position x and y
-      var pipe = game.add.sprite(x, y, "pipe");
+      var pipe = game.add.sprite(x, y, 'pipe');
 
       // Add the pipe to our previously created group
       this.pipes.add(pipe);
@@ -126,10 +126,10 @@ const makeGame = el => {
         if (i < holePosition) {
           return true;
         }
-        console.log("HOLE SIZE", holeSize(this.score));
+        console.log('HOLE SIZE', holeSize(this.score));
         return i >= holePosition + holeSize(this.score);
       };
-      console.log("adding pipe row");
+      console.log('adding pipe row');
       // Randomly pick a number between 1 and 5
       // This will be the hole position
       // var hole = Math.floor(Math.random() * numberOfRows) + 1;
@@ -151,10 +151,10 @@ const makeGame = el => {
         this.pausedText = game.add.text(
           270,
           game.world.centerY - 100,
-          "Game Over",
+          'Game Over',
           {
-            font: "180px Flappy Bird",
-            fill: "#2a2a2a"
+            font: '180px Flappy Bird',
+            fill: '#2a2a2a'
           }
         );
         this.pausedText = game.add.text(
@@ -162,8 +162,8 @@ const makeGame = el => {
           game.world.centerY + 100,
           `Final Score: ${finalScore}`,
           {
-            font: "100px Helvetica",
-            fill: "#000"
+            font: '100px Helvetica',
+            fill: '#000'
           }
         );
       }
@@ -172,8 +172,8 @@ const makeGame = el => {
       game.paused = true;
       if (!this.pausedText) {
         this.pausedText = game.add.text(130, game.world.centerY - 50, text, {
-          font: "100px Helvetica",
-          fill: "green"
+          font: '100px Helvetica',
+          fill: 'green'
         });
       }
     },
@@ -185,20 +185,19 @@ const makeGame = el => {
           () => this.addRowOfPipes(),
           this
         );
-        console.log("setting timer");
+        console.log('setting timer');
       }
     },
     resume() {
       if (!playable) {
-        console.log("game not playable yet");
+        console.log('game not playable yet');
         return;
       }
       if (this.bird.alive === false) {
         // Bird is already dead
-        console.log("not resuming on a dead bird");
+        console.log('not resuming on a dead bird');
         return;
       }
-      console.log("resuming game");
       this.addTimer();
       game.paused = false;
       if (this.pausedText) {
@@ -226,7 +225,7 @@ const makeGame = el => {
     // Restart the game
     restartGame: function() {
       // Start the 'main' state, which restarts the game
-      console.log("restarting");
+      console.log('restarting');
       this.bird.alive = true;
       game.paused = false;
       this.clearPausedText();
@@ -242,7 +241,7 @@ const makeGame = el => {
       this.bird.alive = false;
 
       // Change the background color of the game to blue
-      game.stage.backgroundColor = "#ffd800";
+      game.stage.backgroundColor = '#ffd800';
 
       // Prevent new pipes from appearing
       playable = false;
@@ -257,7 +256,7 @@ const makeGame = el => {
     }
   };
   // Add the 'mainState' and call it 'main'
-  game.state.add("main", mainState);
+  game.state.add('main', mainState);
 
   return [game, mainState];
 };

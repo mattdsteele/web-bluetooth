@@ -1,14 +1,14 @@
-import fromEvent from "xstream/extra/fromEvent";
-import pairwise from "xstream/extra/pairwise";
-import debounce from "xstream/extra/debounce";
-import xs from "xstream";
+import fromEvent from 'xstream/extra/fromEvent';
+import pairwise from 'xstream/extra/pairwise';
+import debounce from 'xstream/extra/debounce';
+import xs from 'xstream';
 
 export default class SpeedCadence {
   async request() {
     let options = {
       filters: [
         {
-          services: ["cycling_speed_and_cadence"]
+          services: ['cycling_speed_and_cadence']
         }
       ]
     };
@@ -18,22 +18,22 @@ export default class SpeedCadence {
       console.error(e);
     }
     if (!this.device) {
-      throw "No device selected";
+      throw 'No device selected';
     }
   }
 
   async connect() {
-    console.log("connecting", this.device);
+    console.log('connecting', this.device);
     if (!this.device) {
       await this.request();
     }
     try {
       const server = await this.device.gatt.connect();
       const service = await server.getPrimaryService(
-        "cycling_speed_and_cadence"
+        'cycling_speed_and_cadence'
       );
-      this.char = await service.getCharacteristic("csc_measurement");
-      this.device.addEventListener("gattserverdisconnected", () => {
+      this.char = await service.getCharacteristic('csc_measurement');
+      this.device.addEventListener('gattserverdisconnected', () => {
         this.onDisconnected();
       });
       this.isReady = true;
@@ -45,8 +45,8 @@ export default class SpeedCadence {
 
   async onDisconnected() {
     this.isReady = false;
-    console.log("Device is disconnected.");
-    console.debug("Reconnecting...");
+    console.log('Device is disconnected.');
+    console.debug('Reconnecting...');
     delete this.device;
     await this.reconnect();
   }
@@ -56,21 +56,21 @@ export default class SpeedCadence {
       3 /* max retries */,
       2 /* seconds delay */,
       async () => {
-        this.time("Connecting to Bluetooth Device... ");
+        this.time('Connecting to Bluetooth Device... ');
         await this.connect();
       },
       () => {
-        console.log("> Bluetooth Device connected. Try disconnect it now.");
+        console.log('> Bluetooth Device connected. Try disconnect it now.');
       },
       () => {
-        this.time("Failed to reconnect.");
+        this.time('Failed to reconnect.');
       }
     );
-    console.log("Reconnected.");
+    console.log('Reconnected.');
   }
 
   parsedMeasurement$() {
-    return fromEvent(this.char, "characteristicvaluechanged")
+    return fromEvent(this.char, 'characteristicvaluechanged')
       .map(({ target: { value } }) => value)
       .map(data => {
         const flags = data.getUint8(0);
@@ -101,7 +101,17 @@ export default class SpeedCadence {
       .map(([prev, curr]) => {
         const revDelta =
           curr.totalCrankRevolutions - prev.totalCrankRevolutions;
-        const timeDelta = curr.lastCrankTime - prev.lastCrankTime;
+        let timeDelta = curr.lastCrankTime - prev.lastCrankTime;
+        if (timeDelta < 0) {
+          console.log(
+            'NEGATIVE TIME',
+            curr.lastCrankTime,
+            prev.lastCrankTime,
+            revDelta
+          );
+          timeDelta = curr.lastCrankTime + 64 - prev.lastCrankTime;
+        }
+        console.log(revDelta, timeDelta);
         return { revDelta, timeDelta };
       })
       .filter(i => i.revDelta > 0)
@@ -125,7 +135,7 @@ export default class SpeedCadence {
         const revDelta = curr.totalRevolutions - prev.totalRevolutions;
         let timeDelta = curr.lastWheelTime - prev.lastWheelTime;
         if (timeDelta < 0) {
-          console.log("NEGATIVE TIME", curr.lastWheelTime, prev.lastWheelTime);
+          console.log('NEGATIVE TIME', curr.lastWheelTime, prev.lastWheelTime);
           timeDelta = curr.lastWheelTime + 64 - prev.lastWheelTime;
         }
         return { revDelta, timeDelta };
@@ -148,7 +158,7 @@ export default class SpeedCadence {
   }
 
   rawMeasurement$() {
-    return fromEvent(this.char, "characteristicvaluechanged").map(
+    return fromEvent(this.char, 'characteristicvaluechanged').map(
       ({ target: { value } }) => {
         return value;
       }
@@ -167,7 +177,7 @@ export default class SpeedCadence {
       if (max === 0) {
         return fail();
       }
-      this.time("Retrying in " + delay + "s... (" + max + " tries left)");
+      this.time('Retrying in ' + delay + 's... (' + max + ' tries left)');
       setTimeout(() => {
         this.exponentialBackoff(--max, delay * 2, toTry, success, fail);
       }, delay * 1000);
@@ -175,6 +185,6 @@ export default class SpeedCadence {
   }
 
   time(text) {
-    console.log("[" + new Date().toJSON().substr(11, 8) + "] " + text);
+    console.log('[' + new Date().toJSON().substr(11, 8) + '] ' + text);
   }
 }
