@@ -23,7 +23,8 @@ const makeGame = el => {
     create: function() {
       console.log('creating');
       // Change the background color of the game to blue
-      game.stage.backgroundColor = '#71c5cf';
+      game.stage.backgroundColor = '#00d890';
+      // game.stage.backgroundColor = '#71c5cf';
 
       // Set the physics system
       game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -50,7 +51,7 @@ const makeGame = el => {
         fill: '#ffffff'
       });
 
-      this.labelCadence = game.add.text(20, 60, 'Speed: 0', {
+      this.labelCadence = game.add.text(20, 60, 'RPMs: 0', {
         font: '30px Arial',
         fill: '#ffffff'
       });
@@ -70,9 +71,11 @@ const makeGame = el => {
         console.log('not moving a dead bird');
         return;
       }
+      // Change the background color of the game to blue
+      game.stage.backgroundColor = '#71c5cf';
       const MIN_SPEED = 40;
       const MAX_SPEED = 80;
-      this.labelCadence.text = `Speed: ${this.speedValue(value)}`;
+      this.labelCadence.text = `RPMs: ${this.speedValue(value)}`;
       if (value < MIN_SPEED) {
         this.pause('PEDAL FASTER');
         console.log('PEDAL FASTER', value);
