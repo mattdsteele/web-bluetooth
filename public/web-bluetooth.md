@@ -197,14 +197,9 @@ I find it easier using async/await
 
 ---
 
-name: deviceInfo
+name: deviceInfo-todo
 
-## Device Info
-
-<button class="device">Connect</button>
-
-<pre class="device-info"></pre>
-
+## TODO Demo of Device Info
 ---
 
 # Listening for Events
@@ -250,10 +245,10 @@ characteristic.addEventListener('characteristicvaluechanged', event => {
 ```
 
 ---
-name: hrDemo
+name: hrDemo-more
 class: smaller-code wide-code
 
-## Heart Rate <button class="hr-button">Connect</button>
+## Heart Rate Monitor
 
 ```
 const device = await navigator.bluetooth.requestDevice({
@@ -267,12 +262,12 @@ characteristic.addEventListener('characteristicvaluechanged',
   handleCharacteristicValueChanged);
 ```
 
+---
 
-<h3 class="heart-rate">Current HR</h3>
-
-<pre class="hr-status"></pre>
+## TODO demo of heart rate monitor
 
 ---
+
 class: middle center
 
 ![bbq](img/bbq-thermometer.jpg)
@@ -285,10 +280,10 @@ You know, for all those times where you're doing cooking with precise timing,
 but you want to binge the last 3 Jessica Jones episodes.
 
 ---
-name: bbqRaw
+name: bbqRaw-demo
 class: smaller-code wide-code
 
-## Raw Data
+## TODO demo of Raw Data
 
 ```
 q.onUpdate(value => {
@@ -363,23 +358,25 @@ char.addEventListener('characteristicvaluechanged', e => {
 ```
 
 ---
-name: bbqParsed
+name: bbqParsed-demo
+
+## TODO demo of parsed BBQ thermometer data
 
 <h2 class="bbq-parsed-raw"></h2>
 
 <h1 class="bbq-parsed-parsed"></h1>
 
 ---
-name: startTdd
+name: startTdd-demo
 class: middle center
-# Let's Do TDD
+# TODO Demo Let's Do TDD
 --
 
 ## (Thermometer-Driven-Deck)
 
 ---
 class: center middle
-name: angleFinder
+name: angleFinder-demo
 
 # Bluetooth Angle Finder
 
@@ -387,8 +384,8 @@ name: angleFinder
 <h2 class="anglefinder-raw"></h2>
 
 ---
-name: angleFinderParsed
-## Reading Strings
+name: angleFinderParsed-demo
+## TODO demo of angle finder Reading Strings
 
 ```javascript
 char.addEventListener('characteristicvaluechanged', e => {
@@ -430,15 +427,6 @@ So this is the elfy
 ---
 class: center
 ![elfie](img/elfie1.jpg)
----
-class: center middle full-img
-![elfie](img/elfie2.jpg)
----
-class: center middle full-img
-![elfie](img/elfie3.jpg)
----
-class: center middle
-![elfie](img/elfie4.jpg)
 ---
 class: middle center
 # Find the Specs
@@ -488,9 +476,9 @@ async writeColors(r, g, b) {
 }
 ```
 ---
-name: elfy
+name: elfy-demo
 
-# Elfy
+# TODO demo of Elfie
 
 <label>Elfy Color: <input type="color" class="elfy-input"></input></label>
 
@@ -501,35 +489,24 @@ class: center middle
 ## *Everything is a stream*
 
 ---
-name: xstreamBbq
+name: xstreamBbq-demo
 class: smaller-code wide-code
 
 ## Input as a stream
 
-```
-import fromEvent from 'xstream/extras/fromEvent';
+```js
+import { fromEvent } from 'rxjs';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 
 const reading$ = fromEvent(char, 'characteristicvaluechanged');
-reading$
-.map(({ target: { value } }) => value.getUint16(12, true))
-.map(e => e / 10)
-.compose(dropRepeats())
-.addListener({
-  next(val) {
+reading$.pipe(
+  map(({ target: { value } }) => value.getUint16(12, true)),
+  map(e => e / 10),
+  distinctUntilChanged()
+).subscribe(val => {
     update('.bbq-stream', `Reading: ${val} degrees`);
-  }
-});
+})
 ```
-
-<h3 class="bbq-stream"></h3>
-
----
-exclude:true
-## Output to a reactive component
-
-CODE react component IF I GET TO IT
-
-(Preact component for thermometer)
 
 ---
 class: middle center
@@ -544,7 +521,7 @@ class: center
 ![diagram](img/csc-spec.png)
 
 ---
-name: rawCycling
+name: rawCycling-demo
 class: smaller-code wide-code
 
 
@@ -556,11 +533,15 @@ const service = await server.getPrimaryService('cycling_speed_and_cadence');
 this.char = await service.getCharacteristic('csc_measurement');
 await this.char.startNotifications();
 
-fromEvent(this.char, 'characteristicvaluechanged')
-.map(({ target: { value } }) => {
-  return value;
-});
+fromEvent(this.char, 'characteristicvaluechanged').pipe(
+  map(({ target: { value } }) => {
+    return value;
+  });
+);
 ```
+---
+## TODO demo of raw data
+
 <code><h3 class="raw-cycling"></h3></code>
 
 ---
@@ -573,14 +554,16 @@ class: smaller-code wide-code
 ![calc](img/csc-calc-1.png)
 ]
 .half[
-```
+```js
 parsedMeasurement$() {
-  return fromEvent(this.char, 'changed')
-  .map(({ target: { value } }) => value )
-  .map(data => {
+  return fromEvent(this.char, 'changed').pipe(
+  map(({ target: { value } }) => value ),
+  map(data => {
     const flags = data.getUint8(0);
     const wheelDataPresent = flags & 0x1;
     const crankDataPresent = flags & 0x2;
+  })
+)
 ```
 ]
 ]
@@ -618,8 +601,8 @@ if (crankDataPresent) {
 ]
 ]
 ---
-name: streamCycling
-## Semi-Parsed
+name: streamCycling-demo
+## TODO demo of Semi-Parsed
 <pre>
   <code class="parsed-cycling"> </code>
 </pre>
@@ -640,25 +623,23 @@ class: center middle
 ![pairwise](img/pairwise.png)
 ---
 class: smaller-code wide-code
-```
+```js
 parsedCadence$() {
-  const cadence$ = this.parsedMeasurement$()
-  .map(({ totalCrankRevolutions, lastCrankTime }) => {
-    return { totalCrankRevolutions, lastCrankTime }
-  })
-
-  .compose(pairwise)
-
-  .map(([prev, curr]) => {
-    const revDelta = curr.totalCrankRevolutions - prev.totalCrankRevolutions;
-    const timeDelta = curr.lastCrankTime - prev.lastCrankTime;
-    return { revDelta, timeDelta };
-  })
-
-  .map(({ revDelta, timeDelta}) => {
-    const minuteRatio = 60 / timeDelta;
-    return revDelta * minuteRatio;
-  });
+  const cadence$ = this.parsedMeasurement$().parse(
+    map(({ totalCrankRevolutions, lastCrankTime }) => {
+      return { totalCrankRevolutions, lastCrankTime }
+    }),
+    pairwise(),
+    map(([prev, curr]) => {
+      const revDelta = curr.totalCrankRevolutions - prev.totalCrankRevolutions;
+      const timeDelta = curr.lastCrankTime - prev.lastCrankTime;
+      return { revDelta, timeDelta };
+    }),
+    map(({ revDelta, timeDelta}) => {
+      const minuteRatio = 60 / timeDelta;
+      return revDelta * minuteRatio;
+    });
+  );
 }
 ```
 
@@ -667,7 +648,7 @@ class: smaller-code wide-code
 ```
 parsedSpeed$() {
 
-  .map(({ revDelta, timeDelta}) => {
+  map(({ revDelta, timeDelta}) => {
     const wheelSize = 622; // mm; 700C
     const wheelCircumference = Math.PI * wheelSize;
 
@@ -682,27 +663,23 @@ parsedSpeed$() {
 ```
 
 ---
-name: cadenceAndSpeed
-# Cadence And Speed
+name: cadenceAndSpeed-demo
+# todo Cadence And Speed
 <h2 class="cadence-calc"></h3>
 
 <h2 class="speed-calc"></h3>
 ---
 class: center middle
-# [Flappy Bike](game.html)
----
-name: flappy
-class: center middle
-<div class="flappy-bike"></div>
+# todo [Flappy Bike](game.html)
 ---
 class: center middle
 # Browser Support
 ---
 class: center middle
-![ciu](img/caniuse-1.png)
+![ciu](img/browser.png)
 ---
 class: full-img middle
-![ciu](img/caniuse-2.png)
+![ciu](img/browser2.png)
 ---
 class: center middle
 # Security
@@ -745,9 +722,6 @@ class: full-img middle
 ![iot](img/iot-security.png)
 ---
 class: middle center
-![seafood](img/seafood-dns.png)
----
-class: middle center
 ![elfy](img/elfy-permissions.png)
 ---
 class: middle center
@@ -757,13 +731,6 @@ Data breach can be more nefarious
 ---
 class: center middle
 # Control Your Devices
----
-class: center middle
-# Physical Web Interop
----
-class: center middle
-<video src="vid/physical-web.mp4" controls></video>
-https://youtu.be/DCri83kUS7M
 ---
 class: center middle
 # Reduce friction

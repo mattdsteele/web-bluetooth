@@ -5,3 +5,4 @@ web-bluetooth
 flappy
 .DS_Store
 *.pem
+.history

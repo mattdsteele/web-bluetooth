@@ -1,15 +1,15 @@
 /* global __dirname */
 
-const path = require("path");
+const path = require('path');
 
-const webpack = require("webpack");
+const webpack = require('webpack');
 
-const dirSrc = path.resolve(__dirname, "src");
-const dirTest = path.resolve(__dirname, "test");
-const public = path.resolve(__dirname, "public");
-const dirBuild = path.resolve(__dirname, "flappy");
-const dirDist = path.resolve(__dirname, "dist");
-const dirDev = path.resolve(__dirname, "dev");
+const dirSrc = path.resolve(__dirname, 'src');
+const dirTest = path.resolve(__dirname, 'test');
+const public = path.resolve(__dirname, 'public');
+const dirBuild = path.resolve(__dirname, 'flappy');
+const dirDist = path.resolve(__dirname, 'dist');
+const dirDev = path.resolve(__dirname, 'dev');
 
 const args = process.argv.slice(2);
 
@@ -19,22 +19,22 @@ let devtool;
 let plugins;
 
 entry = {
-  slides: "./src/index.js",
-  game: "./src/game.js"
+  slides: './src/index.js',
+  game: './src/game.js',
 };
 output = {
   path: dirBuild,
-  filename: "[name].js"
+  filename: '[name].js',
 };
 plugins = [
   // Avoid publishing files when compilation fails
-  new webpack.NoEmitOnErrorsPlugin()
+  new webpack.NoEmitOnErrorsPlugin(),
 ];
 // Create Sourcemaps for the bundle
-devtool = "source-map";
+devtool = 'source-map';
 
 module.exports = {
-  mode: "development",
+  mode: 'development',
   entry,
   output,
   plugins,
@@ -42,13 +42,13 @@ module.exports = {
   devServer: {
     compress: true,
     contentBase: public,
-    historyApiFallback: true
+    historyApiFallback: true,
   },
   module: {
-    rules: []
+    rules: [],
   },
   stats: {
     // Nice colored output
-    colors: true
-  }
+    colors: true,
+  },
 };
