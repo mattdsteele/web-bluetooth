@@ -4,23 +4,23 @@ window.Phaser = require('phaser-ce/build/custom/phaser-split');
 
 const width = 1180;
 const height = 580;
-const velocity = -150;
+const velocity = -250;
 const numberOfRows = 11;
 let playable = false;
 
-const makeGame = el => {
+const makeGame = (el) => {
   // Initialize Phaser, and create a width by height game
   var game = new Phaser.Game(width, height, Phaser.AUTO, el);
 
   // Create our 'main' state that will contain the game
   var mainState = {
-    preload: function() {
+    preload: function () {
       // Load the bird sprite
       game.load.image('bird', 'flap/assets/dospace.png');
       game.load.image('pipe', 'flap/assets/pipe.png');
     },
 
-    create: function() {
+    create: function () {
       console.log('creating');
       // Change the background color of the game to blue
       game.stage.backgroundColor = '#00d890';
@@ -48,12 +48,12 @@ const makeGame = el => {
       this.score = 0;
       this.labelScore = game.add.text(20, 20, 'Score: 0', {
         font: '30px Arial',
-        fill: '#ffffff'
+        fill: '#ffffff',
       });
 
       this.labelCadence = game.add.text(20, 60, 'RPMs: 0', {
         font: '30px Arial',
-        fill: '#ffffff'
+        fill: '#ffffff',
       });
 
       this.paused = true;
@@ -94,7 +94,7 @@ const makeGame = el => {
         .to({ y: height - height * fraction }, 200, Phaser.Easing.Cubic.InOut)
         .start();
     },
-    addOnePipe: function(x, y) {
+    addOnePipe: function (x, y) {
       // Create a pipe at the position x and y
       var pipe = game.add.sprite(x, y, 'pipe');
 
@@ -111,8 +111,8 @@ const makeGame = el => {
       pipe.checkWorldBounds = true;
       pipe.outOfBoundsKill = true;
     },
-    addRowOfPipes: function() {
-      const holeSize = score => {
+    addRowOfPipes: function () {
+      const holeSize = (score) => {
         if (score < 4) {
           return 5;
         } else if (score <= 6) {
@@ -157,7 +157,7 @@ const makeGame = el => {
           'Game Over',
           {
             font: '180px Flappy Bird',
-            fill: '#2a2a2a'
+            fill: '#2a2a2a',
           }
         );
         this.pausedText = game.add.text(
@@ -166,7 +166,7 @@ const makeGame = el => {
           `Final Score: ${finalScore}`,
           {
             font: '100px Helvetica',
-            fill: '#000'
+            fill: '#000',
           }
         );
       }
@@ -176,7 +176,7 @@ const makeGame = el => {
       if (!this.pausedText) {
         this.pausedText = game.add.text(130, game.world.centerY - 50, text, {
           font: '100px Helvetica',
-          fill: 'green'
+          fill: 'green',
         });
       }
     },
@@ -184,7 +184,7 @@ const makeGame = el => {
     addTimer() {
       if (!this.timer) {
         this.timer = game.time.events.loop(
-          9000,
+          5000,
           () => this.addRowOfPipes(),
           this
         );
@@ -211,7 +211,7 @@ const makeGame = el => {
       this.pausedText.destroy();
       delete this.pausedText;
     },
-    update: function() {
+    update: function () {
       // If the bird is out of the screen (too high or too low)
       // Call the 'restartGame' function
       // if (this.bird.y < 0 || this.bird.y > height) this.restartGame();
@@ -226,7 +226,7 @@ const makeGame = el => {
     },
 
     // Restart the game
-    restartGame: function() {
+    restartGame: function () {
       // Start the 'main' state, which restarts the game
       console.log('restarting');
       this.bird.alive = true;
@@ -256,7 +256,7 @@ const makeGame = el => {
       setTimeout(() => {
         this.restartGame();
       }, 5000);
-    }
+    },
   };
   // Add the 'mainState' and call it 'main'
   game.state.add('main', mainState);

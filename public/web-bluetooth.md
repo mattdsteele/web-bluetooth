@@ -369,10 +369,7 @@ name: bbqParsed-demo
 ---
 name: startTdd-demo
 class: middle center
-# TODO Demo Let's Do TDD
---
-
-## (Thermometer-Driven-Deck)
+# TODO Demo Full Thermometer
 
 ---
 class: center middle
