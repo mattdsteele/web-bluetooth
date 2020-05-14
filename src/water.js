@@ -23,3 +23,15 @@ keyboard.bind('ctrl + /', async () => {
     }
   };
 });
+keyboard.bind('ctrl + .', async () => {
+  const turnTouch = document.querySelector('turn-touch');
+  await turnTouch.connect();
+  const slideshow = window._slideshow;
+  document.title += '⚡';
+  turnTouch.onLeft = () => {
+    slideshow.gotoPreviousSlide();
+  };
+  turnTouch.onRight = () => {
+    slideshow.gotoNextSlide();
+  };
+});
