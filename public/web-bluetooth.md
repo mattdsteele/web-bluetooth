@@ -373,29 +373,6 @@ class: middle center
 
 ---
 class: center middle
-name: angleFinder-demo
-
-# Bluetooth Angle Finder
-
-
-<h2 class="anglefinder-raw"></h2>
-
----
-name: angleFinderParsed-demo
-## TODO demo of angle finder Reading Strings
-
-```javascript
-char.addEventListener('characteristicvaluechanged', e => {
-  const { value } = e.target;
-  const decoder = new TextDecoder('utf-8');
-  console.log(decoder.decode(val));
-});
-```
-
-<h2 class="anglefinder-parsed"></h2>
-
----
-class: center middle
 # Writing Data
 
 ## *I hope you like `ArrayBuffer`s*
@@ -477,37 +454,19 @@ name: elfy-demo
 
 # TODO demo of Elfie
 
-<label>Elfy Color: <input type="color" class="elfy-input"></input></label>
+---
+name: elfy-demo
+
+# TODO Mouse Detection
 
 ---
-class: center middle
-# Reactive Bluetooth Programming
+name: elfy-demo
 
-## *Everything is a stream*
-
----
-name: xstreamBbq-demo
-class: smaller-code wide-code
-
-## Input as a stream
-
-```js
-import { fromEvent } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
-
-const reading$ = fromEvent(char, 'characteristicvaluechanged');
-reading$.pipe(
-  map(({ target: { value } }) => value.getUint16(12, true)),
-  map(e => e / 10),
-  distinctUntilChanged()
-).subscribe(val => {
-    update('.bbq-stream', `Reading: ${val} degrees`);
-})
-```
+# TODO Indiana Jones
 
 ---
 class: middle center
-# Bike speed/cadence 
+# Bike speed/cadence sensor
 
 ---
 class: center
@@ -600,9 +559,6 @@ if (crankDataPresent) {
 ---
 name: streamCycling-demo
 ## TODO demo of Semi-Parsed
-<pre>
-  <code class="parsed-cycling"> </code>
-</pre>
 
 ---
 ```

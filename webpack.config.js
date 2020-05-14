@@ -20,6 +20,7 @@ let plugins;
 
 entry = {
   slides: './src/index.js',
+  water: './src/water.js',
   game: './src/game.js',
 };
 output = {

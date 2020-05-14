@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "@polymer/lit-element": "^0.6.2",
+    "bt-device": "^1.0.4",
     "keyboardjs": "^2.4.1",
     "phaser-ce": "^2.11.1",
     "string.prototype.padstart": "^3.0.0",
