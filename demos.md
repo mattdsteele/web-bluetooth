@@ -11,3 +11,19 @@ bike cadence/speed https://output.jsbin.com/lawilik/3/
 bike flappy http://localhost:8080/game.html
 bike lights ✅
 bb8 ✅
+
+Videos to make
+BBQ raw PC
+BBQ parsed PC
+BBQ completed PC
+
+HRM Phone
+Elfie Phone
+Scale + Elfie Phone
+
+Indiana Jones none
+
+Bike 1 Phone
+Bike 2 Phone
+Bike 3 Phone
+Flappy PC

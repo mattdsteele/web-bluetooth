@@ -16,7 +16,7 @@ const makeGame = (el) => {
   var mainState = {
     preload: function () {
       // Load the bird sprite
-      game.load.image('bird', 'flap/assets/dospace.png');
+      game.load.image('bird', 'flap/assets/200ok.png');
       game.load.image('pipe', 'flap/assets/pipe.png');
     },
 

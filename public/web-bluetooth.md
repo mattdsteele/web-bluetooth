@@ -197,9 +197,10 @@ I find it easier using async/await
 
 ---
 
-name: deviceInfo-todo
+name: deviceInfo-demo
 
-## TODO Demo of Device Info
+## Device Info
+<video src="vid/device-info.mp4" controls></video>
 ---
 
 # Listening for Events
@@ -264,7 +265,8 @@ characteristic.addEventListener('characteristicvaluechanged',
 
 ---
 
-## TODO demo of heart rate monitor
+## Heart Rate Monitor
+<video src="vid/Hrm-9.m4v" controls></video>
 
 ---
 
@@ -283,23 +285,8 @@ but you want to binge the last 3 Jessica Jones episodes.
 name: bbqRaw-demo
 class: smaller-code wide-code
 
-## TODO demo of Raw Data
-
-```
-q.onUpdate(value => {
-  const arr = new Uint8Array(value.buffer);
-  const items = [];
-
-  for (let i = 0; i < value.byteLength; i++) {
-    items.push(padStart(arr[i].toString(16), 2, '0'));
-  }
-
-  update(selector, items.join(' '));
-}); 
-```
-
-
-<h3 class="thermometer-1">Sensor 1</h3>
+## Raw BBQ Data
+<video src="vid/Bbq-1-1.m4v" controls></video>
 
 ???
 Here's the data it produces. But what does it mean?
@@ -360,16 +347,8 @@ char.addEventListener('characteristicvaluechanged', e => {
 ---
 name: bbqParsed-demo
 
-## TODO demo of parsed BBQ thermometer data
-
-<h2 class="bbq-parsed-raw"></h2>
-
-<h1 class="bbq-parsed-parsed"></h1>
-
----
-name: startTdd-demo
-class: middle center
-# TODO Demo Full Thermometer
+## Parsed BBQ Thermometer Data
+<video src="vid/Bbq-2-2.m4v" controls></video>
 
 ---
 class: center middle
@@ -452,17 +431,21 @@ async writeColors(r, g, b) {
 ---
 name: elfy-demo
 
-# TODO demo of Elfie
+# Elfie Light
+
+<video src="vid/Elfie-7.m4v" controls></video>
 
 ---
 name: elfy-demo
 
-# TODO Mouse Detection
+# Mouse Detection
+
+<video src="vid/Mouse-11.m4v" controls></video>
 
 ---
 name: elfy-demo
 
-# TODO Indiana Jones
+<video src="vid/Indiana-Jones-10.m4v" controls></video>
 
 ---
 class: middle center
@@ -496,9 +479,8 @@ fromEvent(this.char, 'characteristicvaluechanged').pipe(
 );
 ```
 ---
-## TODO demo of raw data
-
-<code><h3 class="raw-cycling"></h3></code>
+## Raw Cycling Speed/Cadence
+<video src="vid/Bike-1-4.m4v" controls></video>
 
 ---
 ![csc-values](img/csc-values.png)
@@ -558,7 +540,8 @@ if (crankDataPresent) {
 ]
 ---
 name: streamCycling-demo
-## TODO demo of Semi-Parsed
+## Semi-Parsed Bike Speed/Cadence
+<video src="vid/Bike-2-5.m4v" controls></video>
 
 ---
 ```
@@ -617,13 +600,17 @@ parsedSpeed$() {
 
 ---
 name: cadenceAndSpeed-demo
-# todo Cadence And Speed
-<h2 class="cadence-calc"></h3>
+## Parsed Bike Speed/Cadence
 
-<h2 class="speed-calc"></h3>
+<video src="vid/Bike-3-6.m4v" controls></video>
 ---
 class: center middle
-# todo [Flappy Bike](game.html)
+# [Flappy Bike](game.html)
+---
+class: center middle
+## Flappy Bike
+
+<video src="vid/Flappy-8.m4v" controls></video>
 ---
 class: center middle
 # Browser Support
@@ -697,6 +684,12 @@ class: center middle
 # Weirdo Projects Are Fun
 ---
 class: center middle
+![led strip](img/led-strip.PNG)
+---
+class: center middle bigvid
+<video src="vid/bike-lghts.mp4" controls></video>
+---
+class: center middle
 ![bb8](img/bb8.png)
 ---
 class: center middle
@@ -704,12 +697,6 @@ class: center middle
 ---
 class: center middle
 <video src="vid/bb8.mp4" controls></video>
----
-class: center middle
-![led strip](img/led-strip.PNG)
----
-class: center middle bigvid
-<video src="vid/bike-lghts.mp4" controls></video>
 ---
 class: center middle
 # Happy Hacking
