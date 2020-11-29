@@ -44,6 +44,10 @@ class: center, middle
 
 # I have more Bluetooth than teeth
 
+
+???
+
+Show some of the devices
 ---
 
 class: middle
@@ -58,6 +62,8 @@ class: center, middle
 ---
 # Enter Web Bluetooth
 
+???
+Newish specification
 ---
 class: middle, center
 # Internet of JavaScript Things
@@ -77,7 +83,7 @@ class: middle, center
 ![bt smart](img/bt-arch.png)
 
 ???
-GATT protocol
+GATT protocol (general attribute profile)
 GATT server, contains 1+ "services"
 serial number, battery, other stuff
 services contain characteristics, live information
@@ -116,7 +122,7 @@ if ('bluetooth' in navigator) {
 ```
 
 ???
-If well-defined service, can access it directly
+If well-defined service, can access it directly. 42 of them
 
 ---
 class: wide-code
@@ -134,6 +140,7 @@ if ('bluetooth' in navigator) {
 ```
 ???
 Otherwise, need to specify the UUID
+How you get to it is another question
 ---
 class: center
 ![device](img/device-chooser.png)
@@ -150,6 +157,9 @@ navigator.bluetooth.requestDevice({
 .then(device => {
   console.log(device.name);
 });
+
+???
+Returns a promise
 ```
 
 ---
@@ -161,6 +171,9 @@ class: smaller-code wide-code
   return server.getPrimaryService('battery_service');
 });
 ```
+
+???
+Once have access to Device, then access BT server. Then access specific Service
 
 ---
 class: smaller-code wide-code
@@ -176,6 +189,11 @@ class: smaller-code wide-code
 })
 .catch(e => { console.error(e) });
 ```
+
+???
+Then access specific Characteristic
+
+Then can read a value
 
 ---
 class: smaller-code wide-code
@@ -244,6 +262,10 @@ characteristic.addEventListener('characteristicvaluechanged', event => {
   console.log(value);
 });
 ```
+
+???
+
+Same code as before, just now ask to start notifications first
 
 ---
 name: hrDemo-more
@@ -344,6 +366,9 @@ char.addEventListener('characteristicvaluechanged', e => {
 });
 ```
 
+???
+That "true" at the end is the key
+
 ---
 name: bbqParsed-demo
 
@@ -366,6 +391,9 @@ await characteristic.writeValue(command);
 console.log('Wrote a value');
 ```
 
+???
+Basic approach is to write a buffer
+
 ---
 class: middle
 ```javascript
@@ -376,10 +404,13 @@ new Uint8Array([0xa, 0x5, 0x3, 0x4]);
 class: center
 ![elfy](img/elfie-phone.jpg)
 ???
-So this is the elfy
+So this is a bluetooth light bulb
 ---
 class: center
 ![elfie](img/elfie1.jpg)
+
+???
+Comes with an app but that's about it
 ---
 class: middle center
 # Find the Specs
@@ -394,6 +425,9 @@ class: middle center
 class: center
 ## iOS: LightBLE
 ![ios](img/ios-1.png) ![ios](img/ios-2.png) 
+
+???
+Can use mobile apps to sniff traffic and detect what might be getting sent
 ---
 class: center
 ## Android: nRF Connect
@@ -405,11 +439,17 @@ class: middle center
 ---
 class: center no-padding
 ![a](img/and-elfie-3.png) ![a](img/and-elfie-1.png) ![a](img/and-elfie-2.png) 
+
+???
+Android is the easiest due to BT sniffing logs
 ---
 class: center
 ## Wireshark
 
 ![wireshark](img/wireshark.png)
+
+???
+Produces a Wireshark approach
 
 ---
 class: smaller-code wide-code
@@ -431,14 +471,14 @@ async writeColors(r, g, b) {
 ---
 name: elfy-demo
 
-# Elfie Light
+## Light Bulb
 
 <video src="vid/Elfie-7.m4v" controls></video>
 
 ---
 name: elfy-demo
 
-# Mouse Detection
+## Mouse Detection
 
 <video src="vid/Mouse-11.m4v" controls></video>
 
@@ -603,9 +643,12 @@ name: cadenceAndSpeed-demo
 ## Parsed Bike Speed/Cadence
 
 <video src="vid/Bike-3-6.m4v" controls></video>
+
+???
+So now what do you do with this?
 ---
 class: center middle
-# [Flappy Bike](game.html)
+# Flappy Bike
 ---
 class: center middle
 ## Flappy Bike
@@ -620,6 +663,10 @@ class: center middle
 ---
 class: full-img middle
 ![ciu](img/browser2.png)
+
+???
+
+This might be all you need
 ---
 class: center middle
 # Security
@@ -628,6 +675,9 @@ class: center middle
 ![ioshit](img/iofshit.png)
 ---
 # Security
+
+???
+Luckily they've thought through at least some of this
 
 --
 ## HTTPS
@@ -640,6 +690,11 @@ class: center middle
 --
 
 ## Sensitive services blacklisted
+
+???
+Can't do keyboards/mice
+
+Blacklist serial numbers
 ---
 class: center middle
 # okay but why
